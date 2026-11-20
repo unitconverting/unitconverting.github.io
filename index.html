@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Timileyin Stephen's student portfolio and unit conversion application.">
+  <title>Timileyin Stephen | Web Developer</title>
+
+  <style>
+    :root {
+      --navy: #101a2c;
+      --ink: #202b3c;
+      --muted: #667085;
+      --purple: #6554d9;
+      --mint: #75e0c1;
+      --white: #ffffff;
+      --pale: #f5f7fb;
+      --line: #e7eaf1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--pale);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .container {
+      width: min(1080px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      color: var(--white);
+      background: var(--navy);
+    }
+
+    .navigation {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      color: var(--mint);
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+    }
+
+    nav a {
+      color: #d8deea;
+      font-size: 0.95rem;
+      text-decoration: none;
+    }
+
+    nav a:hover,
+    nav a:focus {
+      color: var(--mint);
+    }
+
+    .hero {
+      min-height: 440px;
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      align-items: center;
+      gap: 48px;
+      padding: 55px 0 75px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--purple);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero .eyebrow {
+      color: var(--mint);
+    }
+
+    h1 {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(2.5rem, 6vw, 4.4rem);
+      line-height: 1.08;
+    }
+
+    .hero-copy {
+      max-width: 610px;
+      margin: 20px 0 26px;
+      color: #c3cada;
+      font-size: 1.08rem;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 18px;
+      color: var(--white);
+      background: var(--purple);
+      border: 0;
+      border-radius: 8px;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .button:hover,
+    .button:focus {
+      background: #5141c4;
+    }
+
+    .button.mint {
+      color: var(--navy);
+      background: var(--mint);
+    }
+
+    .monogram {
+      width: min(100%, 290px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      justify-self: center;
+      color: white;
+      background: linear-gradient(145deg, #8072f1, #3b327e);
+      border: 1px solid #ffffff35;
+      border-radius: 36% 64% 56% 44% / 43% 38% 62% 57%;
+      box-shadow: 0 24px 70px #00000040;
+      font-size: 6rem;
+      font-weight: 700;
+      letter-spacing: -0.08em;
+    }
+
+    main {
+      padding: 48px 0;
+    }
+
+    .section {
+      margin-bottom: 22px;
+      padding: 30px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px #17233a08;
+      scroll-margin-top: 20px;
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: 1.6rem;
+    }
+
+    .section p {
+      max-width: 760px;
+      color: var(--muted);
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .skills li {
+      padding: 8px 14px;
+      color: #493eb0;
+      background: #f0eeff;
+      border-radius: 99px;
+      font-size: 0.93rem;
+      font-weight: 700;
+    }
+
+    .project-card {
+      padding: 22px;
+      background: #f8f8ff;
+      border: 1px solid #e6e3ff;
+      border-radius: 12px;
+    }
+
+    .project-card h3 {
+      margin: 0 0 6px;
+      color: var(--navy);
+    }
+
+    .project-card p {
+      margin: 0 0 16px;
+    }
+
+    .converter {
+      margin-top: 20px;
+      padding: 22px;
+      background: #fafbff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .converter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 12px;
+      color: var(--ink);
+      background: white;
+      border: 1px solid #cfd5e1;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    input:focus,
+    select:focus {
+      outline: 3px solid #6554d933;
+      border-color: var(--purple);
+    }
+
+    .converter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .button.clear {
+      color: var(--ink);
+      background: #e9edf4;
+    }
+
+    .result {
+      min-height: 56px;
+      margin: 18px 0 0;
+      padding: 14px;
+      color: var(--navy);
+      background: #eefaf6;
+      border-left: 4px solid #38b48e;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .contact-link {
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    footer {
+      padding: 24px 0;
+      color: #c3cada;
+      background: var(--navy);
+      text-align: center;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    @media (max-width: 700px) {
+      .navigation {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        padding: 16px 0;
+      }
+
+      nav {
+        gap: 12px 18px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 34px;
+        padding: 48px 0;
+      }
+
+      .monogram {
+        width: 210px;
+      }
+
+      .section {
+        padding: 23px;
+      }
+
+      .converter-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header id="home">
+    <div class="container navigation">
+      <a class="brand" href="#home">Timileyin Stephen</a>
+
+      <nav aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#project">Project</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+
+    <div class="container hero">
+      <div>
+        <p class="eyebrow">Computer Science Student · Software & Web Developer</p>
+        <h1>Building practical things for the web.</h1>
+        <p class="hero-copy">
+          Hello, I’m Timileyin Stephen, a Computer Science student at
+          Federal Polytechnic Ado-Ekiti. I’m to build useful websites
+          and tools with HTML, CSS and JavaScript.
+        </p>
+        <a class="button mint" href="#project">Explore my project</a>
+      </div>
+
+      <div class="monogram" aria-label="Initials TS">TS</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section" id="about">
+      <h2>About</h2>
+      <p>
+        I’m interested in web development, practical technology, and creating
+        tools that make everyday tasks easier. This portfolio shares my
+        learning progress and projects as I develop my web skills.
+      </p>
+    </section>
+
+    <section class="section" id="skills">
+      <h2>Skills</h2>
+      <p>I’m building my foundation in these web technologies:</p>
+      <ul class="skills">
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+      </ul>
+    </section>
+
+    <section class="section" id="project">
+  <h2>Featured Project</h2>
+
+  <div class="project-card">
+    <p class="eyebrow">Topic 53</p>
+    <h3>Unit Conversion Application</h3>
+    <p>
+      A downloadable app for converting length, weight, volume,
+      temperature and speed.
+    </p>
+
+    <p>
+      <a class="button" href="unit-converter.html">Open the app</a>
+      <a class="button" href="unit-converter.html" download>Download the app</a>
+    </p>
+  </div>
+</section>
+
+    <section class="section" id="contact">
+      <h2>Contact</h2>
+      <p>
+        You can reach me by email at
+       <p class="contact-link">timilehinstephen23@gmail.com</p>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© <span id="year"></span> Timileyin Stephen · Portfolio</p>
+    </div>
+  </footer>
+
+ <script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

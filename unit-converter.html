@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Converter | Timileyin Stephen</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 32px 16px;
+      display: grid;
+      place-items: center;
+      color: #202b3c;
+      background: #f3f5fb;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .app {
+      width: min(100%, 650px);
+      padding: 32px;
+      background: white;
+      border: 1px solid #e4e8f0;
+      border-radius: 20px;
+      box-shadow: 0 18px 50px #17233a12;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      color: #6554d9;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .tag {
+      padding: 6px 10px;
+      color: #5141c4;
+      background: #f0eeff;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      color: #101a2c;
+      font-size: clamp(2rem, 6vw, 2.7rem);
+    }
+
+    .intro {
+      margin: 8px 0 24px;
+      color: #667085;
+    }
+
+    label {
+      display: block;
+      margin: 0 0 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    select,
+    input {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 12px;
+      color: #202b3c;
+      background: white;
+      border: 1px solid #cfd5e1;
+      border-radius: 9px;
+      font: inherit;
+    }
+
+    select:focus,
+    input:focus {
+      outline: 3px solid #6554d933;
+      border-color: #6554d9;
+    }
+
+    .field { margin-bottom: 16px; }
+
+    .units {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: 12px;
+    }
+
+    .swap {
+      width: 46px;
+      height: 46px;
+      margin-bottom: 1px;
+      color: #5141c4;
+      background: #f0eeff;
+      border: 0;
+      border-radius: 9px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button.primary,
+    button.clear {
+      min-height: 46px;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 9px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.primary {
+      color: white;
+      background: #6554d9;
+    }
+
+    button.primary:hover { background: #5141c4; }
+
+    button.clear {
+      color: #202b3c;
+      background: #e9edf4;
+    }
+
+    .result {
+      min-height: 58px;
+      margin: 20px 0 0;
+      padding: 16px;
+      color: #183d32;
+      background: #eefaf6;
+      border-left: 4px solid #38b48e;
+      border-radius: 7px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .hint {
+      margin: 14px 0 0;
+      color: #667085;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 520px) {
+      .app { padding: 23px; }
+      .units { grid-template-columns: 1fr; }
+      .swap { justify-self: center; transform: rotate(90deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <div class="topline">
+      <a class="brand" href="index.html">← Timileyin Stephen</a>
+      <span class="tag">TOPIC 53</span>
+    </div>
+
+    <h1>Unit Converter</h1>
+    <p class="intro">Convert common measurements quickly and easily.</p>
+
+    <div class="field">
+      <label for="category">Category</label>
+      <select id="category">
+        <option value="length">Length</option>
+        <option value="weight">Weight</option>
+        <option value="volume">Volume</option>
+        <option value="temperature">Temperature</option>
+        <option value="speed">Speed</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="amount">Value</label>
+      <input id="amount" type="number" step="any" placeholder="Enter a value">
+    </div>
+
+    <div class="units">
+      <div class="field">
+        <label for="fromUnit">From</label>
+        <select id="fromUnit"></select>
+      </div>
+
+      <button class="swap" id="swap" type="button" aria-label="Swap units">⇄</button>
+
+      <div class="field">
+        <label for="toUnit">To</label>
+        <select id="toUnit"></select>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="convert" type="button">Convert</button>
+      <button class="clear" id="clear" type="button">Clear</button>
+    </div>
+
+    <p class="result" id="result" aria-live="polite">
+      Your converted value will appear here.
+    </p>
+    <p class="hint">Tip: you can press Enter to convert.</p>
+  </main>
+
+  <script>
+    const unitData = {
+      length: {
+        meters: 1,
+        kilometers: 1000,
+        centimeters: 0.01,
+        millimeters: 0.001,
+        miles: 1609.344,
+        feet: 0.3048,
+        inches: 0.0254
+      },
+      weight: {
+        kilograms: 1,
+        grams: 0.001,
+        milligrams: 0.000001,
+        pounds: 0.45359237,
+        ounces: 0.028349523125
+      },
+      volume: {
+        liters: 1,
+        milliliters: 0.001,
+        "US gallons": 3.785411784,
+        cups: 0.2365882365,
+        "cubic meters": 1000
+      },
+      speed: {
+        "meters/second": 1,
+        "kilometers/hour": 1 / 3.6,
+        "miles/hour": 0.44704,
+        "feet/second": 0.3048,
+        knots: 0.514444
+      },
+      temperature: {
+        Celsius: "Celsius",
+        Fahrenheit: "Fahrenheit",
+        Kelvin: "Kelvin"
+      }
+    };
+
+    const category = document.getElementById("category");
+    const amount = document.getElementById("amount");
+    const fromUnit = document.getElementById("fromUnit");
+    const toUnit = document.getElementById("toUnit");
+    const result = document.getElementById("result");
+
+    function fillUnits() {
+      const names = Object.keys(unitData[category.value]);
+      fromUnit.innerHTML = "";
+      toUnit.innerHTML = "";
+
+      names.forEach((name) => {
+        fromUnit.add(new Option(name, name));
+        toUnit.add(new Option(name, name));
+      });
+
+      if (names.length > 1) toUnit.selectedIndex = 1;
+      result.textContent = "Your converted value will appear here.";
+    }
+
+    function temperatureToCelsius(value, unit) {
+      if (unit === "Fahrenheit") return (value - 32) * 5 / 9;
+      if (unit === "Kelvin") return value - 273.15;
+      return value;
+    }
+
+    function fromCelsius(value, unit) {
+      if (unit === "Fahrenheit") return value * 9 / 5 + 32;
+      if (unit === "Kelvin") return value + 273.15;
+      return value;
+    }
+
+    function convert() {
+      if (amount.value.trim() === "" || !Number.isFinite(Number(amount.value))) {
+        result.textContent = "Please enter a number first.";
+        amount.focus();
+        return;
+      }
+
+      const value = Number(amount.value);
+      const from = fromUnit.value;
+      const to = toUnit.value;
+      let answer;
+
+      if (category.value === "temperature") {
+        answer = fromCelsius(temperatureToCelsius(value, from), to);
+      } else {
+        answer = value * unitData[category.value][from] / unitData[category.value][to];
+      }
+
+      result.textContent = `${value} ${from} = ${Number(answer.toFixed(6))} ${to}`;
+    }
+
+    category.addEventListener("change", fillUnits);
+    document.getElementById("convert").addEventListener("click", convert);
+
+    document.getElementById("swap").addEventListener("click", () => {
+      const oldFrom = fromUnit.value;
+      fromUnit.value = toUnit.value;
+      toUnit.value = oldFrom;
+    });
+
+    document.getElementById("clear").addEventListener("click", () => {
+      amount.value = "";
+      result.textContent = "Your converted value will appear here.";
+      amount.focus();
+    });
+
+    amount.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") convert();
+    });
+
+    fillUnits();
+  </script>
+</body>
+</html>
